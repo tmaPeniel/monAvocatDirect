@@ -1,14 +1,14 @@
 import { Link, useLocation } from 'react-router-dom'
 import {
+  Calendar,
+  MessageSquare,
+  User,
+  FileText,
+  Clock,
+  Scale,
   Home,
   Briefcase,
-  FileText,
-  Users,
-  Settings,
-  ChevronRight,
   Shield,
-  Scale,
-  User,
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -18,9 +18,12 @@ const sidebarLinks = {
     { label: 'Mes dossiers', path: '/client/cases', icon: FileText },
   ],
   avocat: [
-    { label: 'Dashboard', path: '/avocat/dashboard', icon: Home },
-    { label: 'Mes dossiers', path: '/avocat/cases', icon: Briefcase },
+    { label: 'Mes Rendez-Vous', path: '/avocat/appointments', icon: Calendar },
+    { label: 'Messages', path: '/avocat/messages', icon: MessageSquare, badge: '2' },
     { label: 'Mon profil', path: '/avocat/profile', icon: User },
+    { label: 'Documents', path: '/avocat/cases', icon: FileText },
+    { label: 'Disponibilites', path: '/avocat/availability', icon: Clock },
+    { label: 'Aide juridictionnelle', path: '/avocat/aide', icon: Scale },
   ],
   admin: [
     { label: 'Dashboard', path: '/admin/dashboard', icon: Shield },
@@ -33,8 +36,18 @@ export default function Sidebar({ open, onClose }) {
 
   const role = profile?.role || 'client'
   const links = sidebarLinks[role] || sidebarLinks.client
+  const isDark = role === 'avocat'
 
   const isActive = (path) => location.pathname === path
+
+  const initials =
+    profile?.prenom?.charAt(0)?.toUpperCase() ||
+    profile?.email?.charAt(0)?.toUpperCase() ||
+    'U'
+
+  const displayName = profile?.prenom
+    ? `${profile.prenom} ${profile.nom || ''}`
+    : profile?.email || 'Utilisateur'
 
   return (
     <>
@@ -49,42 +62,34 @@ export default function Sidebar({ open, onClose }) {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 z-40 h-full w-64 bg-white border-r border-gray-200
+          fixed top-0 left-0 z-40 h-full w-64 flex flex-col
           transform transition-transform duration-200 ease-in-out
           lg:translate-x-0 lg:static lg:z-auto
           ${open ? 'translate-x-0' : '-translate-x-full'}
+          ${isDark ? 'bg-[#1a1a1a]' : 'bg-white border-r border-gray-200'}
         `}
       >
-        {/* Sidebar Header */}
-        <div className="flex items-center space-x-2 h-16 px-6 border-b border-gray-100">
-          <Scale className="h-7 w-7 text-[#1a56db]" />
-          <span className="text-lg font-bold">
-            <span className="text-[#1a56db]">MonAvocat</span>
-            <span className="text-[#c8a951]">Direct</span>
-          </span>
-        </div>
-
-        {/* Profile Badge */}
-        <div className="px-4 py-4 border-b border-gray-100">
-          <div className="flex items-center space-x-3 px-2">
-            <div className="w-9 h-9 rounded-full bg-[#1a56db] flex items-center justify-center text-white font-semibold text-sm">
-              {profile?.prenom?.charAt(0)?.toUpperCase() ||
-                profile?.email?.charAt(0)?.toUpperCase() ||
-                'U'}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">
-                {profile?.prenom
-                  ? `${profile.prenom} ${profile.nom || ''}`
-                  : profile?.email || 'Utilisateur'}
-              </p>
-              <p className="text-xs text-gray-500 capitalize">{role}</p>
-            </div>
-          </div>
+        {/* Logo */}
+        <div className={`flex items-center h-16 px-5 ${isDark ? 'border-b border-gray-800' : 'border-b border-gray-100'}`}>
+          <Link to="/" className="flex items-center" onClick={onClose}>
+            <svg
+              width="26"
+              height="32"
+              viewBox="0 0 26 32"
+              fill="none"
+              className="h-8 w-auto"
+            >
+              <path
+                d="M13 0L0 32h5l2.8-7h10.4l2.8 7h5L13 0z"
+                fill={isDark ? '#ffffff' : '#1a1a1a'}
+              />
+              <path d="M9 22l4-10.5L17 22H9z" fill="#DC2626" />
+            </svg>
+          </Link>
         </div>
 
         {/* Navigation */}
-        <nav className="px-3 py-4 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {links.map((link) => {
             const Icon = link.icon
             const active = isActive(link.path)
@@ -96,33 +101,65 @@ export default function Sidebar({ open, onClose }) {
                 onClick={onClose}
                 className={`
                   flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                  ${
-                    active
+                  ${isDark
+                    ? active
+                      ? 'bg-red-600/20 text-red-400'
+                      : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
+                    : active
                       ? 'bg-blue-50 text-[#1a56db]'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                   }
                 `}
               >
-                <div className="flex items-center space-x-3">
-                  <Icon className={`h-5 w-5 ${active ? 'text-[#1a56db]' : 'text-gray-400'}`} />
+                <div className="flex items-center gap-3">
+                  <Icon
+                    className={`h-5 w-5 ${
+                      isDark
+                        ? active ? 'text-red-400' : 'text-gray-500'
+                        : active ? 'text-[#1a56db]' : 'text-gray-400'
+                    }`}
+                  />
                   <span>{link.label}</span>
                 </div>
-                {active && <ChevronRight className="h-4 w-4 text-[#1a56db]" />}
+                {link.badge && (
+                  <span className="bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                    {link.badge}
+                  </span>
+                )}
               </Link>
             )
           })}
         </nav>
 
-        {/* Sidebar Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-100">
-          <Link
-            to="/"
-            onClick={onClose}
-            className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-          >
-            <Home className="h-5 w-5 text-gray-400" />
-            <span>Retour au site</span>
-          </Link>
+        {/* User info at bottom */}
+        <div className={`p-4 ${isDark ? 'border-t border-gray-800' : 'border-t border-gray-100'}`}>
+          <div className="flex items-center gap-3 px-2">
+            {profile?.photo_url ? (
+              <img
+                src={profile.photo_url}
+                alt=""
+                className="w-9 h-9 rounded-full object-cover flex-shrink-0"
+              />
+            ) : (
+              <div
+                className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 ${
+                  isDark
+                    ? 'bg-gray-700 text-gray-300'
+                    : 'bg-[#1a56db] text-white'
+                }`}
+              >
+                {initials}
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              <p className={`text-sm font-medium truncate ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
+                {displayName}
+              </p>
+              <p className={`text-xs capitalize ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+                {role}
+              </p>
+            </div>
+          </div>
         </div>
       </aside>
     </>

@@ -26,6 +26,7 @@ import LawyerDashboard from './pages/lawyer/LawyerDashboard'
 import LawyerCases from './pages/lawyer/LawyerCases'
 import LawyerCaseDetail from './pages/lawyer/LawyerCaseDetail'
 import LawyerProfileEdit from './pages/lawyer/LawyerProfileEdit'
+import LawyerAppointments from './pages/lawyer/LawyerAppointments'
 
 // Admin pages
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -129,6 +130,7 @@ function App() {
             }
           >
             <Route path="/avocat/dashboard" element={<LawyerDashboard />} />
+            <Route path="/avocat/appointments" element={<LawyerAppointments />} />
             <Route path="/avocat/cases" element={<LawyerCases />} />
             <Route path="/avocat/cases/:id" element={<LawyerCaseDetail />} />
             <Route path="/avocat/profile" element={<LawyerProfileEdit />} />
