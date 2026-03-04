@@ -1,17 +1,17 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Scale, Search, User, LogOut, Menu, X } from 'lucide-react'
+import { Menu, X, Home, Search, User, LogOut } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
 export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const { user, profile, signOut } = useAuth()
   const navigate = useNavigate()
 
   const handleSignOut = async () => {
     await signOut()
     navigate('/')
-    setMobileMenuOpen(false)
+    setMenuOpen(false)
   }
 
   const getDashboardPath = () => {
@@ -22,143 +22,133 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
-            <Scale className="h-8 w-8 text-[#1a56db]" />
-            <span className="text-xl font-bold">
-              <span className="text-[#1a56db]">MonAvocat</span>
-              <span className="text-[#c8a951]">Direct</span>
-            </span>
-          </Link>
-
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              to="/"
-              className="text-gray-600 hover:text-[#1a56db] transition-colors font-medium"
+        <div className="relative flex items-center justify-between h-14">
+          {/* Left: Hamburger (mobile) / Nav links (desktop) */}
+          <div className="flex items-center gap-6">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="lg:hidden p-1.5 -ml-1.5 text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+              aria-label="Menu"
             >
-              Accueil
-            </Link>
-            <Link
-              to="/search"
-              className="text-gray-600 hover:text-[#1a56db] transition-colors font-medium flex items-center space-x-1"
-            >
-              <Search className="h-4 w-4" />
-              <span>Rechercher un avocat</span>
-            </Link>
+              {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+            <div className="hidden lg:flex items-center gap-6">
+              <Link
+                to="/"
+                className="text-gray-700 hover:text-red-600 text-sm font-medium transition-colors"
+              >
+                Accueil
+              </Link>
+              <Link
+                to="/search"
+                className="text-gray-700 hover:text-red-600 text-sm font-medium transition-colors flex items-center gap-1"
+              >
+                <Search className="h-4 w-4" />
+                Rechercher un avocat
+              </Link>
+            </div>
           </div>
 
-          {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
+          {/* Center: Logo (absolutely centered) */}
+          {/* REMPLACER LOGO_PLACEHOLDER PAR LE LOGO FINAL (marque "A" stylisee) */}
+          <Link to="/" className="absolute left-1/2 -translate-x-1/2">
+            <svg
+              width="26"
+              height="32"
+              viewBox="0 0 26 32"
+              fill="none"
+              className="h-8 w-auto"
+              aria-label="Mon Avocat Direct"
+            >
+              <path
+                d="M13 0L0 32h5l2.8-7h10.4l2.8 7h5L13 0z"
+                fill="#1a1a1a"
+              />
+              <path
+                d="M9 22l4-10.5L17 22H9z"
+                fill="#DC2626"
+              />
+            </svg>
+          </Link>
+
+          {/* Right: Auth Buttons */}
+          <div className="flex items-center gap-3">
             {user ? (
               <>
                 <Link
                   to={getDashboardPath()}
-                  className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg text-[#1a56db] hover:bg-blue-50 transition-colors font-medium"
+                  className="text-sm font-bold text-gray-900 hover:text-red-600 transition-colors"
                 >
-                  <User className="h-4 w-4" />
-                  <span>Dashboard</span>
+                  Dashboard
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors font-medium"
+                  className="p-2 text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Deconnexion"
                 >
-                  <LogOut className="h-4 w-4" />
-                  <span>Deconnexion</span>
+                  <LogOut className="h-5 w-5" />
                 </button>
               </>
             ) : (
               <>
                 <Link
                   to="/login"
-                  className="px-4 py-2 rounded-lg text-[#1a56db] hover:bg-blue-50 transition-colors font-medium"
+                  className="text-sm font-bold text-gray-900 hover:text-red-600 transition-colors"
                 >
                   Connexion
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-2 rounded-lg bg-[#1a56db] text-white hover:bg-blue-700 transition-colors font-medium"
+                  className="px-5 py-2 rounded-full bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors"
                 >
                   Inscription
                 </Link>
               </>
             )}
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-100 bg-white">
-          <div className="px-4 py-4 space-y-2">
+      {/* Dropdown Menu */}
+      {menuOpen && (
+        <div className="lg:hidden border-t border-gray-100 bg-white shadow-lg">
+          <div className="px-4 py-3 space-y-1">
             <Link
               to="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-[#1a56db] transition-colors font-medium"
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium"
             >
+              <Home className="h-5 w-5 text-gray-400" />
               Accueil
             </Link>
             <Link
               to="/search"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center space-x-2 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-[#1a56db] transition-colors font-medium"
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium"
             >
-              <Search className="h-4 w-4" />
-              <span>Rechercher un avocat</span>
+              <Search className="h-5 w-5 text-gray-400" />
+              Rechercher un avocat
             </Link>
-
-            <hr className="my-2 border-gray-100" />
-
-            {user ? (
+            {user && (
               <>
+                <hr className="my-2 border-gray-100" />
                 <Link
                   to={getDashboardPath()}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center space-x-2 px-4 py-3 rounded-lg text-[#1a56db] hover:bg-blue-50 transition-colors font-medium"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium"
                 >
-                  <User className="h-4 w-4" />
-                  <span>Dashboard</span>
+                  <User className="h-5 w-5 text-gray-400" />
+                  Mon espace
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center space-x-2 w-full px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors font-medium"
+                  className="flex items-center gap-3 w-full px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium"
                 >
-                  <LogOut className="h-4 w-4" />
-                  <span>Deconnexion</span>
+                  <LogOut className="h-5 w-5 text-gray-400" />
+                  Deconnexion
                 </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 rounded-lg text-[#1a56db] hover:bg-blue-50 transition-colors font-medium text-center"
-                >
-                  Connexion
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 rounded-lg bg-[#1a56db] text-white hover:bg-blue-700 transition-colors font-medium text-center"
-                >
-                  Inscription
-                </Link>
               </>
             )}
           </div>
