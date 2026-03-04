@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { Scale } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -8,12 +7,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center space-x-2 mb-4">
-              <Scale className="h-7 w-7 text-[#1a56db]" />
-              <span className="text-xl font-bold">
-                <span className="text-white">MonAvocat</span>
-                <span className="text-[#c8a951]">Direct</span>
-              </span>
+            <Link to="/" className="inline-block mb-4">
+              <img src="/Logo.png" alt="Mon Avocat Direct" className="h-10 w-auto" />
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-md">
               La plateforme de mise en relation avec des avocats qualifies.
