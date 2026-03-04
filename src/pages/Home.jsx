@@ -31,7 +31,6 @@ export default function Home() {
       <section className="text-center pt-10 pb-6 px-4">
         <h1
           className="text-[26px] sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight leading-tight"
-          style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
         >
           Mon Avocat Direct{' '}
           <sup className="text-[13px] sm:text-sm align-super font-normal">©</sup>
@@ -46,11 +45,12 @@ export default function Home() {
           SECTION 2 — Banniere de recherche avec image de fond
           ================================================================ */}
       <section className="relative mx-4 sm:mx-6 lg:mx-auto lg:max-w-5xl">
-        {/* REMPLACER IMAGE_PLACEHOLDER_1 PAR L'IMAGE FINALE (bureau d'avocat avec marteau de justice, tons bruns) */}
-        <div className="w-full h-48 sm:h-56 md:h-64 rounded-xl bg-gray-200 flex items-center justify-center overflow-hidden">
-          <span className="text-gray-400 text-sm font-medium tracking-wider select-none">
-            IMAGE_PLACEHOLDER_1
-          </span>
+        <div className="w-full h-48 sm:h-56 md:h-64 rounded-xl overflow-hidden">
+          <img
+            src="/Design/FondSearchBar.jpg"
+            alt="Cabinet d'avocat"
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Carte de recherche en overlay */}
@@ -150,13 +150,12 @@ export default function Home() {
       <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-14">
           {/* Image circulaire */}
-          {/* REMPLACER IMAGE_PLACEHOLDER_2 PAR L'IMAGE FINALE (avocat tenant la balance de la justice, fond rouge) */}
           <div className="flex-shrink-0">
-            <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-full bg-gray-200 border-[5px] border-red-600 flex items-center justify-center">
-              <span className="text-gray-400 text-[11px] font-medium text-center px-6 select-none">
-                IMAGE_PLACEHOLDER_2
-              </span>
-            </div>
+            <img
+              src="/Design/PicPH2.png"
+              alt="Avocat tenant la balance de la justice"
+              className="w-56 h-56 sm:w-64 sm:h-64 object-contain"
+            />
           </div>
 
           {/* Contenu texte */}
@@ -205,7 +204,6 @@ export default function Home() {
         <div className="max-w-4xl mx-auto text-center">
           <h2
             className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 leading-tight"
-            style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
           >
             Pourquoi nous choisir ?
           </h2>
@@ -216,13 +214,12 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-4 sm:gap-8 md:gap-12">
             {/* Rapide */}
             <div className="flex flex-col items-center">
-              {/* REMPLACER IMAGE_PLACEHOLDER_3 PAR L'IMAGE FINALE (icone chronometre/vitesse, style outline blanc) */}
-              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 bg-[#3A3A3A] rounded-full flex items-center justify-center mb-4">
-                <span className="text-gray-500 text-[9px] sm:text-[10px] font-medium text-center leading-tight select-none">
-                  IMAGE
-                  <br />
-                  PLACEHOLDER_3
-                </span>
+              <div className="w-24 sm:w-28 md:w-32 h-20 sm:h-24 md:h-28 overflow-hidden mb-4">
+                <img
+                  src="/Design/Rapide.png"
+                  alt=""
+                  className="w-full"
+                />
               </div>
               <span className="bg-red-600 text-white text-xs sm:text-sm font-semibold px-4 sm:px-6 py-1.5 sm:py-2 rounded-full">
                 Rapide
@@ -231,13 +228,12 @@ export default function Home() {
 
             {/* Facile */}
             <div className="flex flex-col items-center">
-              {/* REMPLACER IMAGE_PLACEHOLDER_4 PAR L'IMAGE FINALE (icone main avec check, style outline blanc) */}
-              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 bg-[#3A3A3A] rounded-full flex items-center justify-center mb-4">
-                <span className="text-gray-500 text-[9px] sm:text-[10px] font-medium text-center leading-tight select-none">
-                  IMAGE
-                  <br />
-                  PLACEHOLDER_4
-                </span>
+              <div className="w-24 sm:w-28 md:w-32 h-20 sm:h-24 md:h-28 overflow-hidden mb-4">
+                <img
+                  src="/Design/Facile.png"
+                  alt=""
+                  className="w-full"
+                />
               </div>
               <span className="bg-red-600 text-white text-xs sm:text-sm font-semibold px-4 sm:px-6 py-1.5 sm:py-2 rounded-full">
                 Facile
@@ -246,13 +242,12 @@ export default function Home() {
 
             {/* Efficace */}
             <div className="flex flex-col items-center">
-              {/* REMPLACER IMAGE_PLACEHOLDER_5 PAR L'IMAGE FINALE (icone engrenages/rouages, style outline blanc) */}
-              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 bg-[#3A3A3A] rounded-full flex items-center justify-center mb-4">
-                <span className="text-gray-500 text-[9px] sm:text-[10px] font-medium text-center leading-tight select-none">
-                  IMAGE
-                  <br />
-                  PLACEHOLDER_5
-                </span>
+              <div className="w-24 sm:w-28 md:w-32 h-20 sm:h-24 md:h-28 overflow-hidden mb-4">
+                <img
+                  src="/Design/Efficace.png"
+                  alt=""
+                  className="w-full"
+                />
               </div>
               <span className="bg-red-600 text-white text-xs sm:text-sm font-semibold px-4 sm:px-6 py-1.5 sm:py-2 rounded-full">
                 Efficace
@@ -268,13 +263,12 @@ export default function Home() {
       <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Image */}
-          {/* REMPLACER IMAGE_PLACEHOLDER_6 PAR L'IMAGE FINALE (personne travaillant sur un laptop, tons rouges/chauds) */}
           <div className="flex-shrink-0">
-            <div className="w-52 h-60 sm:w-56 sm:h-64 md:w-60 md:h-72 rounded-2xl bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-400 text-[11px] font-medium text-center px-4 select-none">
-                IMAGE_PLACEHOLDER_6
-              </span>
-            </div>
+            <img
+              src="/Design/AvocatPH6.png"
+              alt="Avocat travaillant sur un laptop"
+              className="w-52 h-60 sm:w-56 sm:h-64 md:w-60 md:h-72 object-contain"
+            />
           </div>
 
           {/* Contenu */}

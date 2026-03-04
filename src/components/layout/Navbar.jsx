@@ -22,14 +22,14 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-black sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-14">
           {/* Left: Hamburger (mobile) / Nav links (desktop) */}
           <div className="flex items-center gap-6">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="lg:hidden p-1.5 -ml-1.5 text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+              className="lg:hidden p-1.5 -ml-1.5 text-white hover:bg-gray-800 rounded-lg transition-colors"
               aria-label="Menu"
             >
               {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -37,13 +37,13 @@ export default function Navbar() {
             <div className="hidden lg:flex items-center gap-6">
               <Link
                 to="/"
-                className="text-gray-700 hover:text-red-600 text-sm font-medium transition-colors"
+                className="text-gray-200 hover:text-red-500 text-sm font-medium transition-colors"
               >
                 Accueil
               </Link>
               <Link
                 to="/search"
-                className="text-gray-700 hover:text-red-600 text-sm font-medium transition-colors flex items-center gap-1"
+                className="text-gray-200 hover:text-red-500 text-sm font-medium transition-colors flex items-center gap-1"
               >
                 <Search className="h-4 w-4" />
                 Rechercher un avocat
@@ -52,25 +52,12 @@ export default function Navbar() {
           </div>
 
           {/* Center: Logo (absolutely centered) */}
-          {/* REMPLACER LOGO_PLACEHOLDER PAR LE LOGO FINAL (marque "A" stylisee) */}
           <Link to="/" className="absolute left-1/2 -translate-x-1/2">
-            <svg
-              width="26"
-              height="32"
-              viewBox="0 0 26 32"
-              fill="none"
+            <img
+              src="/Logo.png"
+              alt="Mon Avocat Direct"
               className="h-8 w-auto"
-              aria-label="Mon Avocat Direct"
-            >
-              <path
-                d="M13 0L0 32h5l2.8-7h10.4l2.8 7h5L13 0z"
-                fill="#1a1a1a"
-              />
-              <path
-                d="M9 22l4-10.5L17 22H9z"
-                fill="#DC2626"
-              />
-            </svg>
+            />
           </Link>
 
           {/* Right: Auth Buttons */}
@@ -79,13 +66,13 @@ export default function Navbar() {
               <>
                 <Link
                   to={getDashboardPath()}
-                  className="text-sm font-bold text-gray-900 hover:text-red-600 transition-colors"
+                  className="text-sm font-bold text-white hover:text-red-500 transition-colors"
                 >
                   Dashboard
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="p-2 text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-gray-800 rounded-lg transition-colors"
                   title="Deconnexion"
                 >
                   <LogOut className="h-5 w-5" />
@@ -95,7 +82,7 @@ export default function Navbar() {
               <>
                 <Link
                   to="/login"
-                  className="text-sm font-bold text-gray-900 hover:text-red-600 transition-colors"
+                  className="text-sm font-bold text-white hover:text-red-500 transition-colors"
                 >
                   Connexion
                 </Link>
