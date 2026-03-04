@@ -72,19 +72,7 @@ export default function Sidebar({ open, onClose }) {
         {/* Logo */}
         <div className={`flex items-center h-16 px-5 ${isDark ? 'border-b border-gray-800' : 'border-b border-gray-100'}`}>
           <Link to="/" className="flex items-center" onClick={onClose}>
-            <svg
-              width="26"
-              height="32"
-              viewBox="0 0 26 32"
-              fill="none"
-              className="h-8 w-auto"
-            >
-              <path
-                d="M13 0L0 32h5l2.8-7h10.4l2.8 7h5L13 0z"
-                fill={isDark ? '#ffffff' : '#1a1a1a'}
-              />
-              <path d="M9 22l4-10.5L17 22H9z" fill="#DC2626" />
-            </svg>
+            <img src="/Logo.png" alt="Mon Avocat Direct" className="h-8 w-auto" />
           </Link>
         </div>
 

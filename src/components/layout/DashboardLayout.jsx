@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { Menu, LogOut, Scale } from 'lucide-react'
+import { Menu, LogOut } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import Sidebar from './Sidebar'
 
@@ -34,12 +34,8 @@ export default function DashboardLayout() {
             </button>
 
             {/* Mobile logo (visible only when sidebar is hidden) */}
-            <div className="lg:hidden flex items-center space-x-2">
-              <Scale className="h-6 w-6 text-[#1a56db]" />
-              <span className="text-lg font-bold">
-                <span className="text-[#1a56db]">MonAvocat</span>
-                <span className="text-[#c8a951]">Direct</span>
-              </span>
+            <div className="lg:hidden flex items-center">
+              <img src="/Logo.png" alt="Mon Avocat Direct" className="h-8 w-auto" />
             </div>
           </div>
 
