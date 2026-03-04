@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Rotis Sans Serif', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        heading: ['League Spartan', 'Helvetica Neue', 'Arial', 'sans-serif'],
+      },
       colors: {
         primary: {
           50: '#eff6ff',

@@ -59,12 +59,8 @@ export default function Register() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2">
-            <Scale className="h-10 w-10 text-primary-500" />
-            <span className="text-3xl font-bold">
-              <span className="text-primary-500">MonAvocat</span>
-              <span className="text-gold-400">Direct</span>
-            </span>
+          <Link to="/" className="inline-block">
+            <img src="/Logo.png" alt="Mon Avocat Direct" className="h-12 w-auto mx-auto" />
           </Link>
           <p className="mt-2 text-gray-500">Créez votre compte</p>
         </div>
