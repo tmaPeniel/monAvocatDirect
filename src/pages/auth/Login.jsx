@@ -26,7 +26,7 @@ const TAB_CONTENT = {
 
 export default function Login() {
   const navigate = useNavigate()
-  const { signIn } = useAuth()
+  const { signIn, signOut, fetchProfile } = useAuth()
 
   const [activeTab, setActiveTab] = useState('client')
   const [email, setEmail] = useState('')
@@ -42,7 +42,22 @@ export default function Login() {
     setLoading(true)
 
     try {
-      await signIn(email, password)
+      const data = await signIn(email, password)
+      const profile = await fetchProfile(data.user.id)
+
+      // Vérifier correspondance rôle ↔ onglet
+      // L'admin peut utiliser n'importe quel onglet (pas d'onglet "Admin")
+      const roleMatchesTab =
+        profile?.role === 'admin' ||
+        profile?.role === activeTab
+
+      if (!roleMatchesTab) {
+        await signOut()
+        const portalLabel = activeTab === 'client' ? 'clients' : 'avocats'
+        toast.error(`Ce portail est réservé aux ${portalLabel}.`)
+        return
+      }
+
       toast.success('Connexion reussie')
       navigate('/dashboard')
     } catch (error) {
@@ -57,29 +72,15 @@ export default function Login() {
       {/* ================================================================
           NAVBAR (variante login — logo a gauche, hamburger a droite)
           ================================================================ */}
-      <header className="border-b border-gray-200">
+      <header className="bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
           {/* Logo */}
-          {/* REMPLACER LOGO_PLACEHOLDER PAR LE LOGO FINAL */}
           <Link to="/" className="flex items-center">
-            <svg
-              width="26"
-              height="32"
-              viewBox="0 0 26 32"
-              fill="none"
-              className="h-8 w-auto"
-              aria-label="Mon Avocat Direct"
-            >
-              <path
-                d="M13 0L0 32h5l2.8-7h10.4l2.8 7h5L13 0z"
-                fill="#1a1a1a"
-              />
-              <path d="M9 22l4-10.5L17 22H9z" fill="#DC2626" />
-            </svg>
+            <img src="/Logo.png" alt="Mon Avocat Direct" className="h-8 w-auto" />
           </Link>
-          {/* Hamburger (decoratif / futur menu) */}
+          {/* Hamburger */}
           <button
-            className="p-1.5 text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 text-white hover:bg-gray-800 rounded-lg transition-colors"
             aria-label="Menu"
           >
             <Menu className="h-6 w-6" />
@@ -304,9 +305,6 @@ export default function Login() {
             <div className="absolute bottom-0 left-0 right-0 p-8 xl:p-10">
               <h2
                 className="text-2xl xl:text-3xl font-bold text-white mb-2 leading-tight"
-                style={{
-                  fontFamily: 'Georgia, "Times New Roman", serif',
-                }}
               >
                 Votre cabinet juridique numerique
               </h2>
@@ -335,9 +333,6 @@ export default function Login() {
             <div className="absolute bottom-0 left-0 right-0 p-8 xl:p-10">
               <h2
                 className="text-2xl xl:text-3xl font-bold text-white mb-2 leading-tight"
-                style={{
-                  fontFamily: 'Georgia, "Times New Roman", serif',
-                }}
               >
                 Justice digitale
               </h2>
