@@ -62,6 +62,7 @@ export function AuthProvider({ children }) {
       password,
     })
     if (error) throw error
+    setUser(data.user)
     return data
   }
 

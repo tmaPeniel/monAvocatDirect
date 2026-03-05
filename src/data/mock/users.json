@@ -1,0 +1,6 @@
+[
+  { "id": "client-001", "email": "client@test.com",           "password": "test123" },
+  { "id": "avocat-001", "email": "avocat@test.com",           "password": "test123" },
+  { "id": "avocat-002", "email": "marie.leblanc@avocat.fr",  "password": "test123" },
+  { "id": "admin-001",  "email": "admin@test.com",            "password": "test123" }
+]

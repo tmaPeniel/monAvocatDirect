@@ -1,115 +1,33 @@
-import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
-import toast from 'react-hot-toast'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import {
   Calendar,
-  Clock,
-  AlertTriangle,
-  Plus,
-  Bell,
-  ChevronDown,
-  Eye,
-  X,
-  Video,
-  Building,
-  MapPin,
+  ExternalLink,
+  AlertCircle,
+  Users,
+  Briefcase,
+  ArrowRight,
 } from 'lucide-react'
+import { CASE_STATUS_LABELS, CASE_STATUS_COLORS } from '../../lib/constants'
+import rawCases    from '../../data/mock/cases.json'
+import rawProfiles from '../../data/mock/profiles.json'
 
-const MOCK_APPOINTMENTS = [
-  {
-    id: '1',
-    client_name: 'Sophie Martin',
-    client_initials: 'SM',
-    date: '2025-03-15',
-    heure: '09:00',
-    type: 'en_ligne',
-    statut: 'confirme',
-  },
-  {
-    id: '2',
-    client_name: 'Jean Dupont',
-    client_initials: 'JD',
-    date: '2025-03-15',
-    heure: '10:30',
-    type: 'au_cabinet',
-    statut: 'confirme',
-  },
-  {
-    id: '3',
-    client_name: 'Marie Lefevre',
-    client_initials: 'ML',
-    date: '2025-03-16',
-    heure: '14:00',
-    type: 'a_domicile',
-    statut: 'confirme',
-  },
-  {
-    id: '4',
-    client_name: 'Pierre Moreau',
-    client_initials: 'PM',
-    date: '2025-03-17',
-    heure: '11:00',
-    type: 'en_ligne',
-    statut: 'confirme',
-  },
-  {
-    id: '5',
-    client_name: 'Claire Bernard',
-    client_initials: 'CB',
-    date: '2025-03-18',
-    heure: '09:30',
-    type: 'au_cabinet',
-    statut: 'confirme',
-  },
-]
+// Résolution des relations (client) — même logique que le mock Supabase
+const MOCK_CASES = rawCases.map((c) => ({
+  ...c,
+  client: rawProfiles.find((p) => p.id === c.client_id) ?? null,
+}))
 
-const TYPE_CONFIG = {
-  en_ligne: { label: 'En ligne', icon: Video, color: 'bg-blue-100 text-blue-700' },
-  au_cabinet: { label: 'Au cabinet', icon: Building, color: 'bg-purple-100 text-purple-700' },
-  a_domicile: { label: 'A domicile', icon: MapPin, color: 'bg-green-100 text-green-700' },
-}
-
-const STATUT_CONFIG = {
-  confirme: { label: 'Confirme', color: 'bg-green-100 text-green-700' },
-  en_attente: { label: 'En attente', color: 'bg-yellow-100 text-yellow-700' },
-  annule: { label: 'Annule', color: 'bg-red-100 text-red-700' },
+const MOCK_STATS = {
+  clients: new Set(rawCases.map((c) => c.client_id)).size,
+  enCours: rawCases.filter((c) => c.statut === 'en_cours').length,
 }
 
 export default function LawyerAppointments() {
-  const { user } = useAuth()
-  const [appointments, setAppointments] = useState(MOCK_APPOINTMENTS)
-  const [loading, setLoading] = useState(false)
-  const [filter, setFilter] = useState('a_venir')
-  const [dateFilter, setDateFilter] = useState('')
-  const [typeFilter, setTypeFilter] = useState('')
-  const [statutFilter, setStatutFilter] = useState('')
-
-  const stats = {
-    total: 128,
-    totalGrowth: '+11%',
-    upcoming: 12,
-    upcomingToday: 2,
-    cancellationRate: '8%',
-    cancellationGrowth: '1%',
-  }
-
-  const filteredAppointments = appointments.filter((apt) => {
-    if (typeFilter && apt.type !== typeFilter) return false
-    if (statutFilter && apt.statut !== statutFilter) return false
-    return true
-  })
-
-  const handleCancel = (id) => {
-    if (!confirm('Annuler ce rendez-vous ?')) return
-    setAppointments((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, statut: 'annule' } : a))
-    )
-    toast.success('Rendez-vous annule')
-  }
+  const { profile } = useAuth()
+  const calLink = profile?.cal_link || ''
 
   return (
     <div className="space-y-6">
@@ -117,238 +35,122 @@ export default function LawyerAppointments() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Mes Rendez-Vous</h1>
-          <p className="text-gray-500 text-sm mt-1">Gerez vos consultations</p>
+          <p className="text-gray-500 mt-1 text-sm">
+            Gérez vos disponibilités et suivez vos dossiers clients
+          </p>
         </div>
-        <div className="flex items-center gap-3">
-          <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors relative">
-            <Bell className="h-5 w-5" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-          </button>
-          <button className="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            Nouveau Rendez-Vous
-          </button>
-        </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Total */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-500 font-medium">Total rendez-vous</span>
-            <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-              <Calendar className="h-5 w-5 text-purple-600" />
-            </div>
-          </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
-          <p className="text-xs text-green-600 font-medium mt-1">{stats.totalGrowth} ce mois</p>
-        </div>
-
-        {/* A venir */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-500 font-medium">A venir cette semaine</span>
-            <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-              <Clock className="h-5 w-5 text-blue-600" />
-            </div>
-          </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.upcoming}</p>
-          <p className="text-xs text-gray-500 mt-1">{stats.upcomingToday} aujourd'hui</p>
-        </div>
-
-        {/* Annulations */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-500 font-medium">Taux d'annulation</span>
-            <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
-              <AlertTriangle className="h-5 w-5 text-orange-600" />
-            </div>
-          </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.cancellationRate}</p>
-          <p className="text-xs text-green-600 font-medium mt-1">{stats.cancellationGrowth} en augmentation</p>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3">
-        {/* A venir / Passes toggle */}
-        <div className="flex bg-gray-100 rounded-lg p-0.5">
+        {calLink && (
           <button
-            onClick={() => setFilter('a_venir')}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              filter === 'a_venir'
-                ? 'bg-gray-900 text-white shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
+            onClick={() => window.open(calLink, '_blank')}
+            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
           >
-            A venir
+            <Calendar className="h-4 w-4" />
+            Gérer mon calendrier
+            <ExternalLink className="h-3.5 w-3.5" />
           </button>
-          <button
-            onClick={() => setFilter('passes')}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              filter === 'passes'
-                ? 'bg-gray-900 text-white shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            Passes
-          </button>
-        </div>
+        )}
+      </div>
 
-        {/* Date filter */}
-        <div className="relative">
-          <select
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-            className="appearance-none bg-white border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm text-gray-600 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500"
-          >
-            <option value="">Toutes les dates</option>
-            <option value="today">Aujourd'hui</option>
-            <option value="week">Cette semaine</option>
-            <option value="month">Ce mois</option>
-          </select>
-          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+      {/* Alerte Cal.com non configuré */}
+      {!calLink && (
+        <div className="card border-amber-200 bg-amber-50">
+          <div className="flex items-center gap-3">
+            <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-amber-800">
+                Calendrier Cal.com non configuré
+              </p>
+              <p className="text-sm text-amber-700 mt-0.5">
+                Ajoutez votre lien Cal.com pour permettre à vos clients de prendre rendez-vous en ligne.
+              </p>
+            </div>
+            <Link
+              to="/avocat/availability"
+              className="bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors flex-shrink-0"
+            >
+              Configurer
+            </Link>
+          </div>
         </div>
+      )}
 
-        {/* Type filter */}
-        <div className="relative">
-          <select
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="appearance-none bg-white border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm text-gray-600 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500"
-          >
-            <option value="">Type de consultation</option>
-            <option value="en_ligne">En ligne</option>
-            <option value="au_cabinet">Au cabinet</option>
-            <option value="a_domicile">A domicile</option>
-          </select>
-          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+      {/* Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="card flex items-center gap-4">
+          <div className="p-3 bg-primary-100 rounded-lg flex-shrink-0">
+            <Users className="h-6 w-6 text-primary-500" />
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Clients actifs</p>
+            <p className="text-2xl font-bold text-gray-900">{MOCK_STATS.clients}</p>
+          </div>
         </div>
-
-        {/* Statut filter */}
-        <div className="relative">
-          <select
-            value={statutFilter}
-            onChange={(e) => setStatutFilter(e.target.value)}
-            className="appearance-none bg-white border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm text-gray-600 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500"
-          >
-            <option value="">Tous les statuts</option>
-            <option value="confirme">Confirme</option>
-            <option value="en_attente">En attente</option>
-            <option value="annule">Annule</option>
-          </select>
-          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+        <div className="card flex items-center gap-4">
+          <div className="p-3 bg-yellow-100 rounded-lg flex-shrink-0">
+            <Briefcase className="h-6 w-6 text-yellow-600" />
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Dossiers en cours</p>
+            <p className="text-2xl font-bold text-gray-900">{MOCK_STATS.enCours}</p>
+          </div>
         </div>
       </div>
 
-      {/* Appointments Table */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200 bg-gray-50">
-                <th className="text-left py-3 px-5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Client
-                </th>
-                <th className="text-left py-3 px-5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Date
-                </th>
-                <th className="text-left py-3 px-5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Heure
-                </th>
-                <th className="text-left py-3 px-5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Type
-                </th>
-                <th className="text-left py-3 px-5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Statut
-                </th>
-                <th className="text-right py-3 px-5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {filteredAppointments.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="py-12 text-center text-gray-400">
-                    <Calendar className="h-10 w-10 mx-auto mb-3 text-gray-300" />
-                    <p className="font-medium">Aucun rendez-vous</p>
-                  </td>
-                </tr>
-              ) : (
-                filteredAppointments.map((apt) => {
-                  const typeConf = TYPE_CONFIG[apt.type] || TYPE_CONFIG.en_ligne
-                  const statutConf = STATUT_CONFIG[apt.statut] || STATUT_CONFIG.confirme
-                  const TypeIcon = typeConf.icon
+      {/* Cal.com card si configuré */}
+      {calLink && (
+        <div className="card bg-gray-900 text-white">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className="font-semibold">Votre calendrier Cal.com</p>
+              <p className="text-gray-400 text-sm mt-0.5 truncate max-w-xs">{calLink}</p>
+            </div>
+            <button
+              onClick={() => window.open(calLink, '_blank')}
+              className="inline-flex items-center gap-2 bg-white text-gray-900 hover:bg-gray-100 text-sm font-medium px-4 py-2 rounded-lg transition-colors flex-shrink-0"
+            >
+              Ouvrir Cal.com
+              <ExternalLink className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+      )}
 
-                  return (
-                    <tr key={apt.id} className="hover:bg-gray-50 transition-colors">
-                      {/* Client */}
-                      <td className="py-4 px-5">
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 flex-shrink-0">
-                            {apt.client_initials}
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">
-                              {apt.client_name}
-                            </p>
-                            <p className="text-xs text-gray-400">Consultation</p>
-                          </div>
-                        </div>
-                      </td>
-                      {/* Date */}
-                      <td className="py-4 px-5">
-                        <span className="text-sm text-gray-700">
-                          {format(new Date(apt.date), 'dd MMM yyyy', { locale: fr })}
-                        </span>
-                      </td>
-                      {/* Heure */}
-                      <td className="py-4 px-5">
-                        <span className="text-sm text-gray-700">{apt.heure}</span>
-                      </td>
-                      {/* Type */}
-                      <td className="py-4 px-5">
-                        <span
-                          className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full ${typeConf.color}`}
-                        >
-                          <TypeIcon className="h-3 w-3" />
-                          {typeConf.label}
-                        </span>
-                      </td>
-                      {/* Statut */}
-                      <td className="py-4 px-5">
-                        <span
-                          className={`inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full ${statutConf.color}`}
-                        >
-                          {statutConf.label}
-                        </span>
-                      </td>
-                      {/* Actions */}
-                      <td className="py-4 px-5 text-right">
-                        <div className="flex items-center justify-end gap-3">
-                          <button className="text-xs font-medium text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1">
-                            <Eye className="h-3.5 w-3.5" />
-                            Voir details
-                          </button>
-                          {apt.statut !== 'annule' && (
-                            <button
-                              onClick={() => handleCancel(apt.id)}
-                              className="text-xs font-medium text-red-600 hover:text-red-700 transition-colors flex items-center gap-1"
-                            >
-                              <X className="h-3.5 w-3.5" />
-                              Annuler
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
-            </tbody>
-          </table>
+      {/* Dossiers récents */}
+      <div className="card">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-base font-semibold text-gray-900">Dossiers récents</h2>
+          <Link
+            to="/avocat/cases"
+            className="text-primary-500 hover:text-primary-600 text-sm font-medium flex items-center gap-1"
+          >
+            Tous les dossiers
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="divide-y divide-gray-100">
+          {MOCK_CASES.map((c) => (
+            <Link
+              key={c.id}
+              to={`/avocat/cases/${c.id}`}
+              className="flex items-center justify-between py-3 hover:bg-gray-50 -mx-6 px-6 transition-colors"
+            >
+              <div className="min-w-0 flex-1">
+                <p className="font-medium text-gray-900 truncate text-sm">{c.titre}</p>
+                <p className="text-xs text-gray-500">
+                  {c.client.prenom} {c.client.nom}
+                  {c.updated_at && (
+                    <span className="ml-2">
+                      — {format(new Date(c.updated_at), 'dd MMM yyyy', { locale: fr })}
+                    </span>
+                  )}
+                </p>
+              </div>
+              <span className={CASE_STATUS_COLORS[c.statut]}>
+                {CASE_STATUS_LABELS[c.statut]}
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </div>
