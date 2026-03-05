@@ -1,0 +1,58 @@
+[
+  {
+    "id": "client-001",
+    "nom": "Dupont",
+    "prenom": "Sophie",
+    "email": "client@test.com",
+    "role": "client",
+    "telephone": "+33 6 12 34 56 78",
+    "photo_url": null,
+    "created_at": "2024-01-15T10:00:00.000Z"
+  },
+  {
+    "id": "avocat-001",
+    "nom": "Martin",
+    "prenom": "Alexandre",
+    "email": "avocat@test.com",
+    "role": "avocat",
+    "telephone": "+33 1 23 45 67 89",
+    "specialite": "Droit de la famille",
+    "ville": "Paris",
+    "adresse": "12 rue de la Paix, 75001 Paris",
+    "description": "Avocat au barreau de Paris depuis 15 ans, spécialisé en droit de la famille et des successions. Disponible pour vous accompagner dans toutes vos démarches.",
+    "tarif": 150,
+    "aide_juridictionnelle": true,
+    "cal_link": "",
+    "is_verified": true,
+    "photo_url": null,
+    "created_at": "2024-01-10T09:00:00.000Z"
+  },
+  {
+    "id": "avocat-002",
+    "nom": "Leblanc",
+    "prenom": "Marie",
+    "email": "marie.leblanc@avocat.fr",
+    "role": "avocat",
+    "telephone": "+33 4 78 90 12 34",
+    "specialite": "Droit du travail",
+    "ville": "Lyon",
+    "adresse": "5 place Bellecour, 69002 Lyon",
+    "description": "Spécialiste en droit du travail et droit social. Défense des salariés et des employeurs dans toutes les procédures prud'homales.",
+    "tarif": 120,
+    "aide_juridictionnelle": false,
+    "cal_link": "https://cal.com/marie-leblanc",
+    "is_verified": true,
+    "photo_url": null,
+    "created_at": "2024-01-12T11:00:00.000Z"
+  },
+  {
+    "id": "admin-001",
+    "nom": "Admin",
+    "prenom": "Super",
+    "email": "admin@test.com",
+    "role": "admin",
+    "telephone": null,
+    "photo_url": null,
+    "created_at": "2024-01-01T00:00:00.000Z"
+  }
+]

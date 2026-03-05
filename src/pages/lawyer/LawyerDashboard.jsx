@@ -108,8 +108,8 @@ export default function LawyerDashboard() {
 
         <div className="card">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <Briefcase className="h-6 w-6 text-blue-600" />
+            <div className="p-3 bg-primary-100 rounded-lg">
+              <Briefcase className="h-6 w-6 text-primary-500" />
             </div>
             <div>
               <p className="text-sm text-gray-500">Dossiers en cours</p>

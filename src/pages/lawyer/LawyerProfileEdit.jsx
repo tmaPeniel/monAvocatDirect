@@ -460,11 +460,11 @@ export default function LawyerProfileEdit() {
             </div>
 
             {/* Data Protection Info */}
-            <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 flex gap-3">
-              <Shield className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div className="bg-primary-50 border border-primary-100 rounded-lg p-4 flex gap-3">
+              <Shield className="h-5 w-5 text-primary-500 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-blue-900">Protection des donnees</p>
-                <p className="text-xs text-blue-700 mt-1">
+                <p className="text-sm font-medium text-primary-800">Protection des donnees</p>
+                <p className="text-xs text-primary-600 mt-1">
                   Vos informations personnelles sont protegees conformement au RGPD. Elles ne sont
                   partagees qu'avec les clients qui prennent rendez-vous avec vous.
                 </p>
