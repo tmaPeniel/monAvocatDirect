@@ -430,13 +430,92 @@ create policy "Users can delete their own avatar"
 
 
 -- ============================================================================
--- 8. DONE
+-- 8. MESSAGES TABLE
+-- ============================================================================
+-- Messages linked to a case, exchanged between client and lawyer.
+
+-- ──────────────────────────────────────────────────────────────────────────────
+-- 8a. messages table
+-- ──────────────────────────────────────────────────────────────────────────────
+create table if not exists public.messages (
+  id         uuid        default gen_random_uuid() primary key,
+  case_id    uuid        not null references public.cases (id) on delete cascade,
+  sender_id  uuid        not null references public.profiles (id),
+  content    text        not null,
+  created_at timestamptz default now(),
+  read_at    timestamptz
+);
+
+comment on table public.messages is 'Messages exchanged between case participants (client & lawyer)';
+
+-- Indexes
+create index if not exists idx_messages_case_id   on public.messages (case_id);
+create index if not exists idx_messages_sender_id on public.messages (sender_id);
+create index if not exists idx_messages_created   on public.messages (created_at);
+
+-- Enable RLS
+alter table public.messages enable row level security;
+
+-- Case participants can view messages
+create policy "Participants can view messages"
+  on public.messages
+  for select
+  using (
+    exists (
+      select 1 from public.cases
+      where cases.id = messages.case_id
+        and (cases.client_id = auth.uid() or cases.avocat_id = auth.uid())
+    )
+    or exists (
+      select 1 from public.profiles
+      where id = auth.uid() and role = 'admin'
+    )
+  );
+
+-- Case participants can send messages
+create policy "Participants can send messages"
+  on public.messages
+  for insert
+  with check (
+    sender_id = auth.uid()
+    and exists (
+      select 1 from public.cases
+      where cases.id = case_id
+        and (cases.client_id = auth.uid() or cases.avocat_id = auth.uid())
+    )
+  );
+
+-- Participants can mark messages as read (update read_at)
+create policy "Participants can mark messages as read"
+  on public.messages
+  for update
+  using (
+    exists (
+      select 1 from public.cases
+      where cases.id = messages.case_id
+        and (cases.client_id = auth.uid() or cases.avocat_id = auth.uid())
+    )
+  );
+
+
+-- ============================================================================
+-- 9. DISPONIBILITES COLUMN
+-- ============================================================================
+-- JSONB column on profiles to store lawyer's indicative weekly schedule.
+-- Structure: { "lundi": { "matin": true, "apres_midi": false, "soir": false }, ... }
+
+alter table public.profiles add column if not exists disponibilites jsonb;
+
+
+-- ============================================================================
+-- 10. DONE
 -- ============================================================================
 -- Schema setup complete. Summary:
---   - 3 tables: profiles, cases, documents
+--   - 4 tables: profiles, cases, documents, messages
 --   - Indexes on frequently queried columns
 --   - Auto-updating updated_at trigger
 --   - Auth trigger to create profile on sign-up
 --   - Row Level Security policies for all tables
 --   - Storage buckets (documents, avatars) with access policies
+--   - disponibilites JSONB column on profiles (lawyer weekly schedule)
 -- ============================================================================

@@ -15,19 +15,19 @@ export default function DashboardLayout() {
   }
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="h-full flex bg-gray-50">
       {/* Sidebar */}
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Bar */}
-        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 sticky top-0 z-30">
+        <header className="bg-black h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 sticky top-0 z-30">
           <div className="flex items-center space-x-4">
             {/* Mobile menu toggle */}
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+              className="lg:hidden p-2 rounded-lg text-gray-300 hover:bg-white/10 transition-colors"
               aria-label="Open sidebar"
             >
               <Menu className="h-5 w-5" />
@@ -42,15 +42,15 @@ export default function DashboardLayout() {
           {/* Sign out button */}
           <button
             onClick={handleSignOut}
-            className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors text-sm font-medium"
+            className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-white/10 transition-colors text-sm font-medium"
           >
             <LogOut className="h-4 w-4" />
-            <span className="hidden sm:inline">Deconnexion</span>
+            <span className="hidden sm:inline">Déconnexion</span>
           </button>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <Outlet />
         </main>
       </div>
