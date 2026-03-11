@@ -16,7 +16,18 @@ const store = {
 // ──────────────────────────────────────────────────────────────
 // AUTH MOCK
 // ──────────────────────────────────────────────────────────────
-let currentSession = null
+const MOCK_SESSION_KEY = 'mock_supabase_session'
+
+// Restaurer la session depuis localStorage au chargement du module
+let currentSession = (() => {
+  try {
+    const saved = localStorage.getItem(MOCK_SESSION_KEY)
+    return saved ? JSON.parse(saved) : null
+  } catch {
+    return null
+  }
+})()
+
 const authListeners = []
 
 const notifyListeners = (event, session) => {
@@ -54,6 +65,7 @@ const mockAuth = {
     }
     const user = { id: mockUser.id, email: mockUser.email }
     currentSession = { user }
+    localStorage.setItem(MOCK_SESSION_KEY, JSON.stringify(currentSession))
     // Différer au prochain tick pour éviter la race condition avec fetchProfile
     setTimeout(() => notifyListeners('SIGNED_IN', currentSession), 0)
     return { data: { user, session: currentSession }, error: null }
@@ -78,6 +90,7 @@ const mockAuth = {
 
   signOut: async () => {
     currentSession = null
+    localStorage.removeItem(MOCK_SESSION_KEY)
     notifyListeners('SIGNED_OUT', null)
     return { error: null }
   },
