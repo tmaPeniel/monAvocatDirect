@@ -1,0 +1,22 @@
+[
+  {
+    "id": "avocat-001",
+    "prenom": "Alexandre",
+    "nom": "Martin",
+    "specialite": "Droit de la famille",
+    "ville": "Paris",
+    "cal_link": "",
+    "photo_url": null,
+    "dossierTitre": "Divorce à l'amiable"
+  },
+  {
+    "id": "avocat-002",
+    "prenom": "Marie",
+    "nom": "Leblanc",
+    "specialite": "Droit du travail",
+    "ville": "Lyon",
+    "cal_link": "https://cal.com/marie-leblanc",
+    "photo_url": null,
+    "dossierTitre": "Litige locatif — Dépôt de garantie"
+  }
+]

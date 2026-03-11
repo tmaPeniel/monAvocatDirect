@@ -83,6 +83,7 @@ export function AuthProvider({ children }) {
     }
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
+    setUser(data.user)
     return data
   }
 

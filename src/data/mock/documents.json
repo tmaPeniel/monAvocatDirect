@@ -1,0 +1,47 @@
+[
+  {
+    "id": "doc-001",
+    "case_id": "case-001",
+    "name": "Acte de mariage.pdf",
+    "file_path": "mock/acte-mariage.pdf",
+    "file_size": 245000,
+    "uploaded_by": "client-001",
+    "created_at": "2024-02-02T10:00:00.000Z"
+  },
+  {
+    "id": "doc-002",
+    "case_id": "case-001",
+    "name": "Convention de divorce.pdf",
+    "file_path": "mock/convention-divorce.pdf",
+    "file_size": 312000,
+    "uploaded_by": "avocat-001",
+    "created_at": "2024-02-05T15:00:00.000Z"
+  },
+  {
+    "id": "doc-003",
+    "case_id": "case-002",
+    "name": "Bail de location.pdf",
+    "file_path": "mock/bail.pdf",
+    "file_size": 180000,
+    "uploaded_by": "client-001",
+    "created_at": "2024-02-11T09:00:00.000Z"
+  },
+  {
+    "id": "doc-004",
+    "case_id": "case-003",
+    "name": "Certificat de décès.pdf",
+    "file_path": "mock/certificat-deces.pdf",
+    "file_size": 95000,
+    "uploaded_by": "client-001",
+    "created_at": "2024-01-06T10:00:00.000Z"
+  },
+  {
+    "id": "doc-005",
+    "case_id": "case-003",
+    "name": "Acte notarié — Partage.pdf",
+    "file_path": "mock/acte-notarie.pdf",
+    "file_size": 420000,
+    "uploaded_by": "avocat-001",
+    "created_at": "2024-01-18T14:00:00.000Z"
+  }
+]

@@ -20,6 +20,10 @@ import ClientDashboard from './pages/client/ClientDashboard'
 import ClientCases from './pages/client/ClientCases'
 import ClientCaseDetail from './pages/client/ClientCaseDetail'
 import ClientNewCase from './pages/client/ClientNewCase'
+import ClientAppointments from './pages/client/ClientAppointments'
+import ClientProfile from './pages/client/ClientProfile'
+import ClientMessages from './pages/client/ClientMessages'
+import ClientAide from './pages/client/ClientAide'
 
 // Lawyer pages
 import LawyerDashboard from './pages/lawyer/LawyerDashboard'
@@ -27,6 +31,9 @@ import LawyerCases from './pages/lawyer/LawyerCases'
 import LawyerCaseDetail from './pages/lawyer/LawyerCaseDetail'
 import LawyerProfileEdit from './pages/lawyer/LawyerProfileEdit'
 import LawyerAppointments from './pages/lawyer/LawyerAppointments'
+import LawyerMessages from './pages/lawyer/LawyerMessages'
+import LawyerAvailability from './pages/lawyer/LawyerAvailability'
+import LawyerAide from './pages/lawyer/LawyerAide'
 
 // Admin pages
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -116,9 +123,13 @@ function App() {
             }
           >
             <Route path="/client/dashboard" element={<ClientDashboard />} />
+            <Route path="/client/appointments" element={<ClientAppointments />} />
+            <Route path="/client/profile" element={<ClientProfile />} />
             <Route path="/client/cases" element={<ClientCases />} />
             <Route path="/client/cases/new" element={<ClientNewCase />} />
             <Route path="/client/cases/:id" element={<ClientCaseDetail />} />
+            <Route path="/client/messages" element={<ClientMessages />} />
+            <Route path="/client/aide" element={<ClientAide />} />
           </Route>
 
           {/* Lawyer routes */}
@@ -134,6 +145,9 @@ function App() {
             <Route path="/avocat/cases" element={<LawyerCases />} />
             <Route path="/avocat/cases/:id" element={<LawyerCaseDetail />} />
             <Route path="/avocat/profile" element={<LawyerProfileEdit />} />
+            <Route path="/avocat/messages" element={<LawyerMessages />} />
+            <Route path="/avocat/availability" element={<LawyerAvailability />} />
+            <Route path="/avocat/aide" element={<LawyerAide />} />
           </Route>
 
           {/* Admin routes */}

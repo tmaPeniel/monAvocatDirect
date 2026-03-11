@@ -1,0 +1,80 @@
+{
+  "plafonds": {
+    "aide_totale": 1069,
+    "aide_partielle": 1603
+  },
+  "bareme_uv": [
+    { "type": "Divorce par consentement mutuel",    "uv": 24 },
+    { "type": "Divorce contentieux",                "uv": 36 },
+    { "type": "Garde d'enfants / autorité parentale","uv": 8  },
+    { "type": "Procédure prud'homale (1ère instance)","uv": 24 },
+    { "type": "Procédure correctionnelle (délit)",  "uv": 16 },
+    { "type": "Procédure criminelle",               "uv": 40 },
+    { "type": "Succession / partage",               "uv": 16 },
+    { "type": "Contrat de bail — résiliation",      "uv": 8  },
+    { "type": "Référé d'urgence",                   "uv": 8  }
+  ],
+  "valeur_uv_euros": 36,
+  "ressources": [
+    {
+      "label": "Conseil National des Barreaux",
+      "url": "https://www.cnb.avocat.fr",
+      "desc": "Textes officiels, barème UV, formulaires de rétribution"
+    },
+    {
+      "label": "CARPA (gestion des fonds)",
+      "url": "https://www.cnb.avocat.fr/fr/la-carpa",
+      "desc": "Caisse des règlements pécuniaires des avocats"
+    },
+    {
+      "label": "Service-Public.fr — AJ",
+      "url": "https://www.service-public.fr/particuliers/vosdroits/F18074",
+      "desc": "Informations officielles sur l'aide juridictionnelle"
+    }
+  ],
+  "etapes_client": [
+    {
+      "num": "1",
+      "title": "Remplissez le formulaire",
+      "desc": "Téléchargez et complétez le formulaire Cerfa n°15626*02 (demande d'aide juridictionnelle)."
+    },
+    {
+      "num": "2",
+      "title": "Rassemblez les pièces justificatives",
+      "desc": "Pièce d'identité, justificatif de ressources (avis d'imposition, bulletins de salaire), justificatif de domicile."
+    },
+    {
+      "num": "3",
+      "title": "Déposez le dossier",
+      "desc": "Déposez votre dossier au Bureau d'Aide Juridictionnelle (BAJ) du Tribunal judiciaire de votre lieu de résidence."
+    },
+    {
+      "num": "4",
+      "title": "Attendez la décision",
+      "desc": "La décision est rendue dans un délai de 1 à 3 mois. En cas d'urgence, une aide provisoire peut être accordée."
+    }
+  ],
+  "etapes_retribution": [
+    {
+      "num": "1",
+      "title": "Réception de la mission",
+      "desc": "Vous recevez la décision d'AJ du BAJ accompagnée du formulaire de désignation."
+    },
+    {
+      "num": "2",
+      "title": "Réalisation de la mission",
+      "desc": "Vous assistez votre client tout au long de la procédure en tenant un registre des actes effectués."
+    },
+    {
+      "num": "3",
+      "title": "Demande de rétribution",
+      "desc": "À la fin de la mission, remplissez le formulaire de demande de rétribution (formulaire Cerfa) et déposez-le au BAJ."
+    },
+    {
+      "num": "4",
+      "title": "Versement par la CARPA",
+      "desc": "Après validation par le BAJ, la CARPA verse la rétribution sur votre compte dans un délai de 30 à 60 jours."
+    }
+  ],
+  "cerfa_url": "https://www.service-public.fr/particuliers/vosdroits/R1444"
+}

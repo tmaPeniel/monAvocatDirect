@@ -91,8 +91,8 @@ export default function ClientDashboard() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="card flex items-center space-x-4">
-          <div className="p-3 bg-blue-100 rounded-lg">
-            <FolderOpen className="h-6 w-6 text-blue-600" />
+          <div className="p-3 bg-primary-100 rounded-lg">
+            <FolderOpen className="h-6 w-6 text-primary-500" />
           </div>
           <div>
             <p className="text-sm text-gray-600">Dossiers en cours</p>

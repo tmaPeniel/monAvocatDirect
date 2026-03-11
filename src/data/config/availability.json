@@ -1,0 +1,16 @@
+{
+  "days": [
+    { "key": "lundi",    "label": "Lundi"    },
+    { "key": "mardi",    "label": "Mardi"    },
+    { "key": "mercredi", "label": "Mercredi" },
+    { "key": "jeudi",    "label": "Jeudi"    },
+    { "key": "vendredi", "label": "Vendredi" },
+    { "key": "samedi",   "label": "Samedi"   },
+    { "key": "dimanche", "label": "Dimanche" }
+  ],
+  "slots": [
+    { "key": "matin",      "label": "Matin",       "sub": "8h–12h"  },
+    { "key": "apres_midi", "label": "Après-midi",  "sub": "12h–18h" },
+    { "key": "soir",       "label": "Soir",        "sub": "18h–20h" }
+  ]
+}
