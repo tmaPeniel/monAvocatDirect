@@ -1,0 +1,12 @@
+{
+  "types": {
+    "en_ligne":   { "label": "En ligne",   "color": "bg-blue-100 text-blue-700" },
+    "au_cabinet": { "label": "Au cabinet", "color": "bg-purple-100 text-purple-700" },
+    "a_domicile": { "label": "À domicile", "color": "bg-orange-100 text-orange-700" }
+  },
+  "statuts": {
+    "confirme":   { "label": "Confirmé",   "color": "bg-green-100 text-green-700" },
+    "en_attente": { "label": "En attente", "color": "bg-yellow-100 text-yellow-700" },
+    "annule":     { "label": "Annulé",     "color": "bg-red-100 text-red-700" }
+  }
+}

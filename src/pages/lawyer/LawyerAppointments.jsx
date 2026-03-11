@@ -1,7 +1,4 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { supabase } from '../../lib/supabase'
-import { useAuth } from '../../contexts/AuthContext'
+import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -12,90 +9,37 @@ import {
   Plus,
   Bell,
   ChevronDown,
-  Eye,
-  X,
   Video,
   Building,
   MapPin,
+  CheckCircle,
+  TrendingUp,
 } from 'lucide-react'
+import appointmentsData from '../../data/mock/appointments.json'
+import rdvConfig from '../../data/config/rdv-config.json'
 
-const MOCK_APPOINTMENTS = [
-  {
-    id: '1',
-    client_name: 'Sophie Martin',
-    client_initials: 'SM',
-    date: '2025-03-15',
-    heure: '09:00',
-    type: 'en_ligne',
-    statut: 'confirme',
-  },
-  {
-    id: '2',
-    client_name: 'Jean Dupont',
-    client_initials: 'JD',
-    date: '2025-03-15',
-    heure: '10:30',
-    type: 'au_cabinet',
-    statut: 'confirme',
-  },
-  {
-    id: '3',
-    client_name: 'Marie Lefevre',
-    client_initials: 'ML',
-    date: '2025-03-16',
-    heure: '14:00',
-    type: 'a_domicile',
-    statut: 'confirme',
-  },
-  {
-    id: '4',
-    client_name: 'Pierre Moreau',
-    client_initials: 'PM',
-    date: '2025-03-17',
-    heure: '11:00',
-    type: 'en_ligne',
-    statut: 'confirme',
-  },
-  {
-    id: '5',
-    client_name: 'Claire Bernard',
-    client_initials: 'CB',
-    date: '2025-03-18',
-    heure: '09:30',
-    type: 'au_cabinet',
-    statut: 'confirme',
-  },
-]
+const TYPE_ICONS = { en_ligne: Video, au_cabinet: Building, a_domicile: MapPin }
 
-const TYPE_CONFIG = {
-  en_ligne: { label: 'En ligne', icon: Video, color: 'bg-blue-100 text-blue-700' },
-  au_cabinet: { label: 'Au cabinet', icon: Building, color: 'bg-purple-100 text-purple-700' },
-  a_domicile: { label: 'A domicile', icon: MapPin, color: 'bg-green-100 text-green-700' },
-}
+const TYPE_CONFIG = Object.fromEntries(
+  Object.entries(rdvConfig.types).map(([k, v]) => [k, { ...v, icon: TYPE_ICONS[k] }])
+)
+const STATUT_CONFIG = rdvConfig.statuts
 
-const STATUT_CONFIG = {
-  confirme: { label: 'Confirme', color: 'bg-green-100 text-green-700' },
-  en_attente: { label: 'En attente', color: 'bg-yellow-100 text-yellow-700' },
-  annule: { label: 'Annule', color: 'bg-red-100 text-red-700' },
+const stats = {
+  total: 128,
+  totalGrowth: '+11%',
+  upcoming: 12,
+  upcomingToday: 2,
+  cancellationRate: '8%',
+  cancellationGrowth: '1%',
 }
 
 export default function LawyerAppointments() {
-  const { user } = useAuth()
-  const [appointments, setAppointments] = useState(MOCK_APPOINTMENTS)
-  const [loading, setLoading] = useState(false)
+  const [appointments, setAppointments] = useState(appointmentsData)
   const [filter, setFilter] = useState('a_venir')
   const [dateFilter, setDateFilter] = useState('')
   const [typeFilter, setTypeFilter] = useState('')
   const [statutFilter, setStatutFilter] = useState('')
-
-  const stats = {
-    total: 128,
-    totalGrowth: '+11%',
-    upcoming: 12,
-    upcomingToday: 2,
-    cancellationRate: '8%',
-    cancellationGrowth: '1%',
-  }
 
   const filteredAppointments = appointments.filter((apt) => {
     if (typeFilter && apt.type !== typeFilter) return false
@@ -108,7 +52,7 @@ export default function LawyerAppointments() {
     setAppointments((prev) =>
       prev.map((a) => (a.id === id ? { ...a, statut: 'annule' } : a))
     )
-    toast.success('Rendez-vous annule')
+    toast.success('Rendez-vous annulé')
   }
 
   return (
@@ -117,12 +61,12 @@ export default function LawyerAppointments() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Mes Rendez-Vous</h1>
-          <p className="text-gray-500 text-sm mt-1">Gerez vos consultations</p>
+          <p className="text-gray-500 text-sm mt-1">Gérez vos consultations</p>
         </div>
         <div className="flex items-center gap-3">
           <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors relative">
             <Bell className="h-5 w-5" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
           </button>
           <button className="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors flex items-center gap-2">
             <Plus className="h-4 w-4" />
@@ -145,34 +89,40 @@ export default function LawyerAppointments() {
           <p className="text-xs text-green-600 font-medium mt-1">{stats.totalGrowth} ce mois</p>
         </div>
 
-        {/* A venir */}
+        {/* À venir */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-500 font-medium">A venir cette semaine</span>
+            <span className="text-sm text-gray-500 font-medium">À venir cette semaine</span>
             <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
               <Clock className="h-5 w-5 text-blue-600" />
             </div>
           </div>
           <p className="text-3xl font-bold text-gray-900">{stats.upcoming}</p>
-          <p className="text-xs text-gray-500 mt-1">{stats.upcomingToday} aujourd'hui</p>
+          <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+            <Calendar className="h-3 w-3" />
+            {stats.upcomingToday} aujourd'hui
+          </p>
         </div>
 
-        {/* Annulations */}
+        {/* Taux d'annulation */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-500 font-medium">Taux d'annulation</span>
+            <span className="text-sm text-gray-500 font-medium">Total rendez-vous</span>
             <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
               <AlertTriangle className="h-5 w-5 text-orange-600" />
             </div>
           </div>
           <p className="text-3xl font-bold text-gray-900">{stats.cancellationRate}</p>
-          <p className="text-xs text-green-600 font-medium mt-1">{stats.cancellationGrowth} en augmentation</p>
+          <p className="text-xs text-green-600 font-medium mt-1 flex items-center gap-1">
+            <TrendingUp className="h-3 w-3" />
+            {stats.cancellationGrowth} en augmentation
+          </p>
         </div>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
-        {/* A venir / Passes toggle */}
+        {/* À venir / Passés toggle */}
         <div className="flex bg-gray-100 rounded-lg p-0.5">
           <button
             onClick={() => setFilter('a_venir')}
@@ -182,7 +132,7 @@ export default function LawyerAppointments() {
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            A venir
+            À venir
           </button>
           <button
             onClick={() => setFilter('passes')}
@@ -192,7 +142,7 @@ export default function LawyerAppointments() {
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            Passes
+            Passés
           </button>
         </div>
 
@@ -221,7 +171,7 @@ export default function LawyerAppointments() {
             <option value="">Type de consultation</option>
             <option value="en_ligne">En ligne</option>
             <option value="au_cabinet">Au cabinet</option>
-            <option value="a_domicile">A domicile</option>
+            <option value="a_domicile">À domicile</option>
           </select>
           <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
         </div>
@@ -234,20 +184,20 @@ export default function LawyerAppointments() {
             className="appearance-none bg-white border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm text-gray-600 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500"
           >
             <option value="">Tous les statuts</option>
-            <option value="confirme">Confirme</option>
+            <option value="confirme">Confirmé</option>
             <option value="en_attente">En attente</option>
-            <option value="annule">Annule</option>
+            <option value="annule">Annulé</option>
           </select>
           <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
         </div>
       </div>
 
-      {/* Appointments Table */}
+      {/* Table */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200 bg-gray-50">
+              <tr className="border-b border-gray-200">
                 <th className="text-left py-3 px-5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Client
                 </th>
@@ -263,7 +213,7 @@ export default function LawyerAppointments() {
                 <th className="text-left py-3 px-5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Statut
                 </th>
-                <th className="text-right py-3 px-5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="text-left py-3 px-5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -287,27 +237,32 @@ export default function LawyerAppointments() {
                       {/* Client */}
                       <td className="py-4 px-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 flex-shrink-0">
+                          <div
+                            className={`w-9 h-9 rounded-full ${apt.client_color} flex items-center justify-center text-xs font-bold text-white flex-shrink-0`}
+                          >
                             {apt.client_initials}
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">
+                            <p className="text-sm font-semibold text-gray-900 truncate">
                               {apt.client_name}
                             </p>
-                            <p className="text-xs text-gray-400">Consultation</p>
+                            <p className="text-xs text-gray-400">{apt.subtitle}</p>
                           </div>
                         </div>
                       </td>
+
                       {/* Date */}
                       <td className="py-4 px-5">
                         <span className="text-sm text-gray-700">
                           {format(new Date(apt.date), 'dd MMM yyyy', { locale: fr })}
                         </span>
                       </td>
+
                       {/* Heure */}
                       <td className="py-4 px-5">
                         <span className="text-sm text-gray-700">{apt.heure}</span>
                       </td>
+
                       {/* Type */}
                       <td className="py-4 px-5">
                         <span
@@ -317,27 +272,28 @@ export default function LawyerAppointments() {
                           {typeConf.label}
                         </span>
                       </td>
+
                       {/* Statut */}
                       <td className="py-4 px-5">
                         <span
-                          className={`inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full ${statutConf.color}`}
+                          className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full ${statutConf.color}`}
                         >
+                          {apt.statut === 'confirme' && <CheckCircle className="h-3 w-3" />}
                           {statutConf.label}
                         </span>
                       </td>
+
                       {/* Actions */}
-                      <td className="py-4 px-5 text-right">
-                        <div className="flex items-center justify-end gap-3">
-                          <button className="text-xs font-medium text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1">
-                            <Eye className="h-3.5 w-3.5" />
-                            Voir details
+                      <td className="py-4 px-5">
+                        <div className="flex items-center gap-4">
+                          <button className="text-xs font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                            Voir détails
                           </button>
                           {apt.statut !== 'annule' && (
                             <button
                               onClick={() => handleCancel(apt.id)}
-                              className="text-xs font-medium text-red-600 hover:text-red-700 transition-colors flex items-center gap-1"
+                              className="text-xs font-medium text-red-600 hover:text-red-700 transition-colors"
                             >
-                              <X className="h-3.5 w-3.5" />
                               Annuler
                             </button>
                           )}
