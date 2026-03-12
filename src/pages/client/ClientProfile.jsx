@@ -93,7 +93,7 @@ export default function ClientProfile() {
     (form.prenom?.charAt(0) || '') + (form.nom?.charAt(0) || '') || 'U'
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Mon profil</h1>
@@ -256,6 +256,7 @@ export default function ClientProfile() {
             <h3 className="text-sm font-semibold text-gray-900 mb-3">Sécurité</h3>
             <button
               type="button"
+              onClick={() => toast('Email de réinitialisation envoyé')}
               className="flex items-center gap-2 text-sm font-medium text-primary-500 hover:text-primary-600 transition-colors"
             >
               <Lock className="h-4 w-4" />

@@ -73,18 +73,10 @@ export default function Login() {
           NAVBAR (variante login — logo a gauche, hamburger a droite)
           ================================================================ */}
       <header className="bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
+        <div className="h-14 flex items-center justify-center">
+          <Link to="/">
             <img src="/Logo.png" alt="Mon Avocat Direct" className="h-8 w-auto" />
           </Link>
-          {/* Hamburger */}
-          <button
-            className="p-1.5 text-white hover:bg-gray-800 rounded-lg transition-colors"
-            aria-label="Menu"
-          >
-            <Menu className="h-6 w-6" />
-          </button>
         </div>
       </header>
 

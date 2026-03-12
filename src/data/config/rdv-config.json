@@ -8,5 +8,10 @@
     "confirme":   { "label": "Confirmé",   "color": "bg-green-100 text-green-700" },
     "en_attente": { "label": "En attente", "color": "bg-yellow-100 text-yellow-700" },
     "annule":     { "label": "Annulé",     "color": "bg-red-100 text-red-700" }
+  },
+  "stats": {
+    "total":   { "value": "128", "growth": "+11% ce mois" },
+    "semaine": { "value": "12",  "today":  "2 aujourd'hui" },
+    "taux":    { "value": "8%",  "growth": "1% en augmentation" }
   }
 }

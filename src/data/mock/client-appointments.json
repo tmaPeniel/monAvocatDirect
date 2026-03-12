@@ -1,0 +1,62 @@
+[
+  {
+    "id": "rdv-001",
+    "titre": "Consultation juridique",
+    "avocat_name": "Maître Leane KAMER",
+    "avocat_specialite": "Avocate en droit du travail",
+    "avocat_initials": "LK",
+    "avocat_color": "bg-rose-400",
+    "date": "2025-03-03",
+    "heure": "14:00",
+    "lieu": "B'hav",
+    "statut": "confirme"
+  },
+  {
+    "id": "rdv-002",
+    "titre": "Suivi dossier en cours",
+    "avocat_name": "Maître Mathilda DONUE",
+    "avocat_specialite": "Avocate en droit pénal",
+    "avocat_initials": "MD",
+    "avocat_color": "bg-amber-400",
+    "date": "2025-12-23",
+    "heure": "13:00",
+    "lieu": "Visioconférence",
+    "statut": "a_venir"
+  },
+  {
+    "id": "rdv-003",
+    "titre": "Signature contrat",
+    "avocat_name": "M. Franck BIGAND",
+    "avocat_specialite": "Avocat en droit pénal",
+    "avocat_initials": "FB",
+    "avocat_color": "bg-slate-400",
+    "date": "2025-12-16",
+    "heure": "13:00",
+    "lieu": "Rouen",
+    "statut": "a_venir"
+  },
+  {
+    "id": "rdv-004",
+    "titre": "Première consultation",
+    "avocat_name": "Maître Franck BIGAND",
+    "avocat_specialite": "Avocat en droit pénal",
+    "avocat_initials": "FB",
+    "avocat_color": "bg-teal-400",
+    "date": "2025-11-26",
+    "heure": "13:00",
+    "lieu": "Rouen",
+    "statut": "a_venir"
+  },
+  {
+    "id": "rdv-005",
+    "titre": "Consultation juridique",
+    "avocat_name": "Maître Thibault MERBE",
+    "avocat_specialite": "Juriste en droit pénal",
+    "avocat_initials": "TM",
+    "avocat_color": "bg-indigo-400",
+    "date": "2025-11-17",
+    "heure": "13:00",
+    "lieu": "Rouen",
+    "statut": "a_venir"
+  }
+]
