@@ -256,6 +256,7 @@ export default function ClientProfile() {
             <h3 className="text-sm font-semibold text-gray-900 mb-3">Sécurité</h3>
             <button
               type="button"
+              onClick={() => toast('Email de réinitialisation envoyé')}
               className="flex items-center gap-2 text-sm font-medium text-primary-500 hover:text-primary-600 transition-colors"
             >
               <Lock className="h-4 w-4" />

@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import {
   Bell,
   Plus,
@@ -22,7 +24,9 @@ const APPOINTMENTS = appointmentsData
 const { stats } = rdvConfig
 
 export default function LawyerAppointments() {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('a_venir')
+  const [filters, setFilters] = useState({ periode: '', type: '', statut: '' })
 
   return (
     <div className="space-y-6">
@@ -33,10 +37,10 @@ export default function LawyerAppointments() {
           <p className="text-sm text-gray-500 mt-0.5">Gérez vos consultations</p>
         </div>
         <div className="flex items-center gap-3">
-          <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <button onClick={() => toast('Aucune nouvelle notification')} className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
             <Bell className="h-5 w-5 text-gray-500" />
           </button>
-          <button className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+          <button onClick={() => navigate('/avocat/availability')} className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
             <Plus className="h-4 w-4" />
             Nouveau Rendez-Vous
           </button>
@@ -116,10 +120,18 @@ export default function LawyerAppointments() {
           </div>
 
           <div className="flex flex-wrap gap-2 sm:ml-auto">
-            {['Toutes les dates', 'Type de consultation', 'Tous les statuts'].map((label) => (
-              <div key={label} className="relative">
-                <select className="appearance-none text-sm text-gray-600 border border-gray-200 rounded-lg pl-3 pr-8 py-1.5 bg-white hover:bg-gray-50 cursor-pointer focus:outline-none focus:ring-1 focus:ring-gray-300">
-                  <option>{label}</option>
+            {[
+              { key: 'periode', label: 'Toutes les dates' },
+              { key: 'type', label: 'Type de consultation' },
+              { key: 'statut', label: 'Tous les statuts' },
+            ].map(({ key, label }) => (
+              <div key={key} className="relative">
+                <select
+                  value={filters[key]}
+                  onChange={(e) => setFilters((f) => ({ ...f, [key]: e.target.value }))}
+                  className="appearance-none text-sm text-gray-600 border border-gray-200 rounded-lg pl-3 pr-8 py-1.5 bg-white hover:bg-gray-50 cursor-pointer focus:outline-none focus:ring-1 focus:ring-gray-300"
+                >
+                  <option value="">{label}</option>
                 </select>
                 <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400 pointer-events-none" />
               </div>
@@ -195,11 +207,11 @@ export default function LawyerAppointments() {
                     {/* ACTIONS */}
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-4">
-                        <button className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                        <button onClick={() => toast('Détails bientôt disponibles')} className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
                           Voir détails
                         </button>
                         {apt.statut !== 'annule' && (
-                          <button className="text-sm font-medium text-red-600 hover:text-red-700 transition-colors">
+                          <button onClick={() => toast.success('Rendez-vous annulé')} className="text-sm font-medium text-red-600 hover:text-red-700 transition-colors">
                             Annuler
                           </button>
                         )}

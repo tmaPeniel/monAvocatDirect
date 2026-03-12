@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import { SPECIALITES, VILLES } from '../../lib/constants'
 import toast from 'react-hot-toast'
 import { useDropzone } from 'react-dropzone'
+
 import {
   Camera,
   User,
@@ -211,71 +212,73 @@ export default function LawyerProfileEdit() {
   ]
 
   return (
-    <div className="space-y-0">
-      {/* Header with dark banner */}
-      <div className="bg-[#1a1a1a] rounded-t-xl px-6 pt-6 pb-20 relative">
-        <h1 className="text-xl font-bold text-white">Mon Profil</h1>
-        <p className="text-gray-400 text-sm mt-1">Modifiez vos informations personnelles</p>
+    <div className="space-y-6">
+      {/* Header page */}
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Mon profil</h1>
+        <p className="text-sm text-gray-500 mt-1">Gérez vos informations professionnelles</p>
       </div>
 
-      {/* Avatar overlapping banner */}
-      <div className="relative px-6 -mt-12 mb-6">
-        <div
-          {...getAvatarRootProps()}
-          className="relative group cursor-pointer inline-block"
-        >
-          <input {...getAvatarInputProps()} />
-          {avatarUrl ? (
-            <img
-              src={avatarUrl}
-              alt="Photo de profil"
-              className="h-24 w-24 rounded-full object-cover border-4 border-white shadow-lg"
-            />
-          ) : (
-            <div className="h-24 w-24 rounded-full bg-gray-300 flex items-center justify-center border-4 border-white shadow-lg">
-              <User className="h-10 w-10 text-gray-500" />
-            </div>
-          )}
-          <div className="absolute bottom-0 right-0 w-8 h-8 bg-red-600 rounded-full flex items-center justify-center border-2 border-white shadow-md">
-            <Camera className="h-4 w-4 text-white" />
+      {/* Carte principale */}
+      <div className="bg-white rounded-xl border border-gray-200 overflow-visible">
+
+        {/* Tabs — au-dessus du bandeau */}
+        <div className="px-6 pt-4 border-b border-gray-200">
+          <div className="flex gap-6">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`pb-3 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === tab.id
+                    ? 'border-red-600 text-red-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
-          {uploadingPhoto && (
-            <div className="absolute inset-0 rounded-full bg-black bg-opacity-50 flex items-center justify-center">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+        </div>
+
+        {/* Bandeau sombre + avatar débordant — même pattern que ClientProfile */}
+        <div className="relative overflow-visible">
+          <div className="bg-primary-800 px-6 py-5 flex items-center gap-5">
+            <div className="w-[76px] flex-shrink-0" />
+            <p className="text-white font-bold text-xl tracking-wide">
+              {form.prenom} {form.nom?.toUpperCase()}
+            </p>
+          </div>
+          <div className="absolute bottom-0 left-6 translate-y-1/2">
+            <div {...getAvatarRootProps()} className="relative cursor-pointer">
+              <input {...getAvatarInputProps()} />
+              <div className="w-[76px] h-[76px] rounded-full border-[3px] border-white overflow-hidden bg-gray-600 flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt="Photo de profil" className="w-full h-full object-cover" />
+                ) : (
+                  <span>{((form.prenom?.charAt(0) || '') + (form.nom?.charAt(0) || '') || 'A').toUpperCase()}</span>
+                )}
+              </div>
+              <button
+                type="button"
+                title="Changer la photo"
+                className="absolute bottom-0.5 right-0 w-6 h-6 bg-primary-500 hover:bg-primary-600 rounded-full border-2 border-white flex items-center justify-center transition-colors"
+              >
+                <Camera className="h-3 w-3 text-white" />
+              </button>
+              {uploadingPhoto && (
+                <div className="absolute inset-0 rounded-full bg-black bg-opacity-50 flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" />
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
-        <div className="inline-block ml-4 align-bottom pb-2">
-          <p className="text-lg font-semibold text-gray-900">
-            {form.prenom} {form.nom}
-          </p>
-          <p className="text-sm text-gray-500">Avocat</p>
-        </div>
-      </div>
 
-      {/* Tabs */}
-      <div className="px-6 border-b border-gray-200">
-        <div className="flex gap-6">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`pb-3 text-sm font-medium border-b-2 transition-colors ${
-                activeTab === tab.id
-                  ? 'border-red-600 text-red-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Tab Content */}
-      <form onSubmit={handleSubmit}>
+        {/* Contenu formulaire */}
+        <form onSubmit={handleSubmit}>
         {activeTab === 'general' && (
-          <div className="p-6 space-y-6">
+          <div className="px-6 pt-12 pb-6 space-y-6">
             {/* Personal Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Prenom */}
@@ -371,6 +374,7 @@ export default function LawyerProfileEdit() {
             {/* Add RDV location */}
             <button
               type="button"
+              onClick={() => toast('Fonctionnalité bientôt disponible')}
               className="flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-700 transition-colors"
             >
               <Plus className="h-4 w-4" />
@@ -449,6 +453,7 @@ export default function LawyerProfileEdit() {
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Securite</h3>
               <button
                 type="button"
+                onClick={() => toast('Email de réinitialisation envoyé')}
                 className="flex items-center justify-between w-full p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center gap-3">
@@ -457,18 +462,6 @@ export default function LawyerProfileEdit() {
                 </div>
                 <ChevronRight className="h-4 w-4 text-gray-400" />
               </button>
-            </div>
-
-            {/* Data Protection Info */}
-            <div className="bg-primary-50 border border-primary-100 rounded-lg p-4 flex gap-3">
-              <Shield className="h-5 w-5 text-primary-500 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-medium text-primary-800">Protection des donnees</p>
-                <p className="text-xs text-primary-600 mt-1">
-                  Vos informations personnelles sont protegees conformement au RGPD. Elles ne sont
-                  partagees qu'avec les clients qui prennent rendez-vous avec vous.
-                </p>
-              </div>
             </div>
 
             {/* Action Buttons */}
@@ -492,7 +485,7 @@ export default function LawyerProfileEdit() {
         )}
 
         {activeTab === 'specialites' && (
-          <div className="p-6 space-y-6">
+          <div className="px-6 pt-12 pb-6 space-y-6">
             <div>
               <h3 className="text-sm font-semibold text-gray-900 mb-1">Specialite principale</h3>
               <p className="text-xs text-gray-500 mb-3">Selectionnez votre domaine d'expertise principal</p>
@@ -604,7 +597,7 @@ export default function LawyerProfileEdit() {
         )}
 
         {activeTab === 'langues' && (
-          <div className="p-6 space-y-6">
+          <div className="px-6 pt-12 pb-6 space-y-6">
             <div>
               <h3 className="text-sm font-semibold text-gray-900 mb-1">Langues parlees</h3>
               <p className="text-xs text-gray-500 mb-4">
@@ -669,7 +662,23 @@ export default function LawyerProfileEdit() {
             </div>
           </div>
         )}
-      </form>
+        </form>
+      </div>
+
+      {/* Bannière RGPD bleue */}
+      <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 flex items-start gap-4">
+        <Shield className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+        <div>
+          <p className="text-sm font-semibold text-blue-800">Protection des données :</p>
+          <p className="text-xs text-gray-600 mt-1">
+            Vos informations personnelles sont sécurisées et ne seront jamais partagées avec des tiers sans votre consentement.
+          </p>
+          <button className="mt-2 text-xs font-semibold text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors">
+            Consultez notre politique de confidentialité
+            <ChevronRight className="h-3 w-3" />
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
