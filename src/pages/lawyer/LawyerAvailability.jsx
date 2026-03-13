@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { ExternalLink, Calendar, Save, Info } from 'lucide-react'
+import { useAuth } from '../../contexts/AuthContext'
 import availabilityData from '../../data/config/availability.json'
 
 const DAYS  = availabilityData.days
@@ -12,17 +13,39 @@ const defaultSchedule = () =>
   )
 
 export default function LawyerAvailability() {
-  const [calLink, setCalLink] = useState('')
-  const [schedule, setSchedule] = useState(defaultSchedule())
+  const { user } = useAuth()
+  const calKey      = `availability_cal_${user?.id}`
+  const scheduleKey = `availability_schedule_${user?.id}`
+
+  const [calLink, setCalLink] = useState(() => {
+    try { return localStorage.getItem(calKey) || '' } catch { return '' }
+  })
+  const [schedule, setSchedule] = useState(() => {
+    try {
+      const saved = localStorage.getItem(scheduleKey)
+      return saved ? JSON.parse(saved) : defaultSchedule()
+    } catch { return defaultSchedule() }
+  })
   const [saving, setSaving] = useState(false)
   const [savingSchedule, setSavingSchedule] = useState(false)
 
+  useEffect(() => {
+    if (user?.id) {
+      try { setCalLink(localStorage.getItem(`availability_cal_${user.id}`) || '') } catch {}
+      try {
+        const saved = localStorage.getItem(`availability_schedule_${user.id}`)
+        if (saved) setSchedule(JSON.parse(saved))
+      } catch {}
+    }
+  }, [user?.id])
+
   const handleSaveCalLink = () => {
     setSaving(true)
+    try { localStorage.setItem(calKey, calLink) } catch {}
     setTimeout(() => {
       setSaving(false)
       toast.success('Lien Cal.com sauvegardé')
-    }, 400)
+    }, 300)
   }
 
   const handleToggle = (dayKey, slotKey) => {
@@ -34,10 +57,11 @@ export default function LawyerAvailability() {
 
   const handleSaveSchedule = () => {
     setSavingSchedule(true)
+    try { localStorage.setItem(scheduleKey, JSON.stringify(schedule)) } catch {}
     setTimeout(() => {
       setSavingSchedule(false)
       toast.success('Horaires sauvegardés')
-    }, 400)
+    }, 300)
   }
 
   return (
