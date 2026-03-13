@@ -34,21 +34,7 @@ export default function Navbar() {
             >
               {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
-            <div className="hidden lg:flex items-center gap-6">
-              <Link
-                to="/"
-                className="text-gray-200 hover:text-red-500 text-sm font-medium transition-colors"
-              >
-                Accueil
-              </Link>
-              <Link
-                to="/search"
-                className="text-gray-200 hover:text-red-500 text-sm font-medium transition-colors flex items-center gap-1"
-              >
-                <Search className="h-4 w-4" />
-                Rechercher un avocat
-              </Link>
-            </div>
+            <div className="hidden lg:flex items-center gap-6" />
           </div>
 
           {/* Center: Logo (absolutely centered) */}
@@ -66,29 +52,22 @@ export default function Navbar() {
               <>
                 <Link
                   to={getDashboardPath()}
-                  className="text-sm font-bold text-white hover:text-red-500 transition-colors"
+                  className="hidden lg:block text-sm font-bold text-white hover:text-red-500 transition-colors"
                 >
-                  Dashboard
+                  Mon espace
                 </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-gray-800 rounded-lg transition-colors"
-                  title="Deconnexion"
-                >
-                  <LogOut className="h-5 w-5" />
-                </button>
               </>
             ) : (
               <>
                 <Link
                   to="/login"
-                  className="text-sm font-bold text-white hover:text-red-500 transition-colors"
+                  className="hidden lg:block text-sm font-bold text-white hover:text-red-500 transition-colors"
                 >
                   Connexion
                 </Link>
                 <Link
                   to="/register"
-                  className="px-5 py-2 rounded-full bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors"
+                  className="hidden lg:block px-5 py-2 rounded-full bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors"
                 >
                   Inscription
                 </Link>
@@ -102,23 +81,7 @@ export default function Navbar() {
       {menuOpen && (
         <div className="lg:hidden border-t border-gray-100 bg-white shadow-lg">
           <div className="px-4 py-3 space-y-1">
-            <Link
-              to="/"
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium"
-            >
-              <Home className="h-5 w-5 text-gray-400" />
-              Accueil
-            </Link>
-            <Link
-              to="/search"
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium"
-            >
-              <Search className="h-5 w-5 text-gray-400" />
-              Rechercher un avocat
-            </Link>
-            {user && (
+            {user ? (
               <>
                 <hr className="my-2 border-gray-100" />
                 <Link
@@ -129,13 +92,24 @@ export default function Navbar() {
                   <User className="h-5 w-5 text-gray-400" />
                   Mon espace
                 </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="flex items-center gap-3 w-full px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium"
+              </>
+            ) : (
+              <>
+                <hr className="my-2 border-gray-100" />
+                <Link
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium"
                 >
-                  <LogOut className="h-5 w-5 text-gray-400" />
-                  Deconnexion
-                </button>
+                  Connexion
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium"
+                >
+                  Inscription
+                </Link>
               </>
             )}
           </div>

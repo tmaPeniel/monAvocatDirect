@@ -1,0 +1,57 @@
+[
+  {
+    "id": "1",
+    "client_name": "Marie INGAMAJI",
+    "client_initials": "MI",
+    "client_color": "bg-rose-400",
+    "date": "2026-03-16",
+    "heure": "10:00",
+    "type": "en_ligne",
+    "statut": "confirme",
+    "subtitle": "Gérez vos consultations"
+  },
+  {
+    "id": "2",
+    "client_name": "Fanon LEBLANC",
+    "client_initials": "FL",
+    "client_color": "bg-amber-500",
+    "date": "2026-03-16",
+    "heure": "10:00",
+    "type": "au_cabinet",
+    "statut": "confirme",
+    "subtitle": "Gérez vos consultations"
+  },
+  {
+    "id": "3",
+    "client_name": "Jean MARTIN",
+    "client_initials": "JM",
+    "client_color": "bg-slate-500",
+    "date": "2026-03-16",
+    "heure": "10:00",
+    "type": "en_ligne",
+    "statut": "confirme",
+    "subtitle": "Gérez vos consultations"
+  },
+  {
+    "id": "4",
+    "client_name": "Sophie DURAND",
+    "client_initials": "SD",
+    "client_color": "bg-teal-500",
+    "date": "2026-03-16",
+    "heure": "10:00",
+    "type": "au_cabinet",
+    "statut": "confirme",
+    "subtitle": "Gérez vos consultations"
+  },
+  {
+    "id": "5",
+    "client_name": "Pierre ROUSSEAU",
+    "client_initials": "PR",
+    "client_color": "bg-indigo-400",
+    "date": "2026-03-16",
+    "heure": "10:00",
+    "type": "a_domicile",
+    "statut": "confirme",
+    "subtitle": "Gérez vos consultations"
+  }
+]

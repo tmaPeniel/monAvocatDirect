@@ -23,9 +23,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
-      if (session?.user) {
-        fetchProfile(session.user.id)
-      }
+      if (session?.user) fetchProfile(session.user.id)
       setLoading(false)
     })
 
@@ -48,19 +46,14 @@ export function AuthProvider({ children }) {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        data: { role, ...metadata },
-      },
+      options: { data: { role, ...metadata } },
     })
     if (error) throw error
     return data
   }
 
   const signIn = async (email, password) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
     setUser(data.user)
     return data
@@ -81,9 +74,7 @@ export function AuthProvider({ children }) {
   }
 
   const updatePassword = async (newPassword) => {
-    const { error } = await supabase.auth.updateUser({
-      password: newPassword,
-    })
+    const { error } = await supabase.auth.updateUser({ password: newPassword })
     if (error) throw error
   }
 
