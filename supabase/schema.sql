@@ -506,6 +506,11 @@ create policy "Participants can mark messages as read"
 
 alter table public.profiles add column if not exists disponibilites jsonb;
 
+-- Additional profile columns used by the client profile page
+alter table public.profiles add column if not exists adresse text;
+alter table public.profiles add column if not exists date_naissance date;
+alter table public.profiles add column if not exists metier text;
+
 
 -- ============================================================================
 -- 10. DONE
@@ -518,4 +523,5 @@ alter table public.profiles add column if not exists disponibilites jsonb;
 --   - Row Level Security policies for all tables
 --   - Storage buckets (documents, avatars) with access policies
 --   - disponibilites JSONB column on profiles (lawyer weekly schedule)
+--   - adresse, date_naissance, metier columns on profiles
 -- ============================================================================
